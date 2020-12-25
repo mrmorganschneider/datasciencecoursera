@@ -2,7 +2,7 @@
 
 source('specDataRead.R', chdir = TRUE)
 
-polluntantmean <- function(pollutant, fileInputs) {
+polluntantmean <- function(pollutant, fileInputs = 1:332) {
    
    if(dir.exists("specdata")){
 
