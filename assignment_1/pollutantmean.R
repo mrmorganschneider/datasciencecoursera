@@ -1,7 +1,5 @@
 #Code for assignment 1 part 1 for R programming
 
-library(stringr, help, pos = 2, lib.loc = NULL)
-
 source('specDataRead.R', chdir = TRUE)
 
 polluntantmean <- function(pollutant, fileInputs) {
