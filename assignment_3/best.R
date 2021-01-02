@@ -32,8 +32,18 @@ best <- function(inpState, outcome) {
     #filters out Not Availables and sorts data
     names(stateData) <- c("Hospital", "Condition")
     stateData <- filter(stateData, stateData[,2] != "Not Available")
+
+    stateData$Condition <- as.numeric(stateData$Condition) 
+
     stateData <- stateData[order(stateData$Condition),]
 
+    outputFrame <- stateData[1,1]
+        
+    if(stateData[2,2] == stateData[1,2]){
+        outputFrame <- rbind(outputFrame, stateData[2,1])
+    }
+    
+    outputFrame
+    #head(stateData)
 
-    head(stateData)
 }
