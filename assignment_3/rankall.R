@@ -25,7 +25,7 @@ rankall <- function(outcome, ranking = "best") {
     names(hosData) <- c("Hospital", "State", "Rate")
     hosData <- filter(hosData, hosData[,3] != "Not Available")
     hosData$Rate <- as.numeric(hosData$Rate) 
-    hosData <- hosData[order(hosData$State, hosData$Rate),]
+    hosData <- hosData[order(hosData$State, hosData$Rate, hosData$Hospital),]
 
     hosData$Rank <- 1
     stateName <- "XX"
@@ -33,20 +33,43 @@ rankall <- function(outcome, ranking = "best") {
 
     for(i in 1:nrow(hosData)){
         if(hosData[i,2] != stateName){
+
             rank <- 1
             stateName <- hosData[i,2]
         }
 
         hosData[i,4] <- rank
-
         rank <- rank + 1
 
     }
 
     if(ranking == "best") {return(subset(hosData,Rank == 1))}
 
-    else if(ranking == "wort"){
+    else if(ranking == "worst"){
 
+        hosData <- hosData[order(hosData$State, -hosData$Rate),]
+
+        hosWorst <- data.frame(matrix(nrow = 0, ncol = 4))
+        names(hosWorst) <- c("Hospital", "State", "Rate", "Rank")
+
+        stateName <- "XX"
+        for(i in 1:nrow(hosData)){
+            if(hosData[i,2] != stateName){
+
+                newFrame <- data.frame(
+                    hosData[i,1], 
+                    hosData[i,2],
+                    hosData[i,3],
+                    hosData[i,4])
+
+                names(newFrame) <- c("Hospital", "State", "Rate", "Rank")
+                hosWorst <- rbind(hosWorst,newFrame)
+
+                stateName <- hosData[i,2]
+            }
+        }
+
+        return(hosWorst)
     }
     
     else {return(subset(hosData, Rank == ranking))}
